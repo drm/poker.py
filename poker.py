@@ -69,13 +69,13 @@ def evaluate(cards):
             else:
                 # higher pair counts, then lower pair, then kicker
                 pairValues = sorted([c[0] for c in groups if len(c) > 1], reverse=True)
-                _value = (hand_value("Two pair"), pairValues + kickers(card_values(), groups[0] + groups[1]))
+                _value = (hand_value("Two pair"), pairValues + kickers(card_values(), pairValues))
         elif groupCount == 2:
             if len(groups[0]) == 3 and len(groups[1]) == 2:
                 # part of 3 counts, part of 2 kicks
                 _value = (hand_value("Full house"), [groups[0][0], groups[1][0]])
             else:
-                _value = (hand_value("Four of a kind"), [groups[0][0]] + kickers(card_values(), groups[0]))
+                _value = (hand_value("Four of a kind"), [groups[0][0], groups[1][0]])
         else:
             pass # 1 group is not possible, exception will be thrown
     if _value == None:
@@ -208,22 +208,22 @@ class Game:
 
 class Player:
     def __init__(self):
-        self._hand = []
+        self._hole = []
 
     def deal(self, card):
-        self._hand.append(card)
+        self._hole.append(card)
         
     def __str__(self):
-        return " ".join(map(str, self._hand))
+        return " ".join(map(str, self._hole))
         
     def hand(self, board):
         possible_hands = []
         possible_hands.append(Hand(board))
         for c in combinations(board, 4):
-            possible_hands.append(Hand([self._hand[0]] + list(c)))
-            possible_hands.append(Hand([self._hand[1]] + list(c)))
+            possible_hands.append(Hand([self._hole[0]] + list(c)))
+            possible_hands.append(Hand([self._hole[1]] + list(c)))
         for c in combinations(board, 3):
-            possible_hands.append(Hand(self._hand + list(c)))
+            possible_hands.append(Hand(self._hole + list(c)))
         possible_hands.sort()
         return possible_hands.pop()
         

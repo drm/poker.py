@@ -88,7 +88,6 @@ class TestHand(unittest.TestCase):
         self.assertTrue(poker.Hand.from_str("AcKcQcJc10c").value == poker.Hand.from_str("AdKdQdJd10d").value) # straight flush
         
         
-        
 class PlayerTest(unittest.TestCase):
     def testHighestHand(self):
         hands = (
